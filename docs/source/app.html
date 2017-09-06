@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='ServerScript-app'>      /**
+</span>       * @class ServerScript.app
+       * 
+       * ServerScript app是HttpServletRequest和HttpServletResponse关联的服务器端的JavaScript方法库。
+       */
+      app = {
+<span id='ServerScript-app-method-log'>        /**
+</span>         * 向当前用户的浏览器控制台中输出指定对象的日志信息。
+         * @param {Object} object 打印的对象。
+         */
+        log: function(object) {
+          Console.print(request, Wb.encode(object), 'log', true);
+        },
+<span id='ServerScript-app-method-info'>        /**
+</span>         * 向当前用户的浏览器控制台中输出指定对象的提示信息。
+         * @param {Object} object 打印的对象。
+         */
+        info: function(object) {
+          Console.print(request, Wb.encode(object), 'info', true);
+        },
+<span id='ServerScript-app-method-warn'>        /**
+</span>         * 向当前用户的浏览器控制台中输出指定对象的警告信息。
+         * @param {HttpServletRequest} request 请求对象。该请求对象用于关联到对应用户。
+         * @param {Object} object 打印的对象。
+         */
+        warn: function(object) {
+          Console.print(request, Wb.encode(object), 'warn', true);
+        },
+<span id='ServerScript-app-method-error'>        /**
+</span>         * 向当前用户的浏览器控制台中输出指定对象的错误信息。
+         * @param {Object} object 打印的对象。
+         */
+        error: function(object) {
+          Console.print(request, Wb.encode(object), 'error', true);
+        },
+<span id='ServerScript-app-method-send'>        /**
+</span>         * 向当前用户的客户端发送指定对象。
+         * @param {Object} object 发送的对象。
+         * @param {Boolean} [successful] 是否成功标识。如果指定该参数将采用JSON格式封装，该模式仅适用于文件上传模式的数据发送。
+         */
+        send: function(object, successful) {
+          if (Wb.isObject(object) || Wb.isArray(object))
+            object = Wb.encode(object);
+          if (successful === undefined &amp;&amp; WebUtil.jsonResponse(request) &amp;&amp; Wb.isString(object))
+            successful = true; //upload模式的json格式响应
+          if (successful === undefined)
+            WebUtil.send(response, object);
+          else
+            WebUtil.send(response, object, successful);
+        },
+<span id='ServerScript-app-method-getFiles'>        /**
+</span>         * 获取指定文件控件的单个或多个文件。
+         * @param {String} fieldName 文件控件名称。
+         * @return {Object[]} 获取的文件数据[{stream:输入流,name:文件名称,size:文件长度},...]，如果未找到返回空数组。
+         */
+        getFiles: function(fieldName) {
+          var files = [],
+            index = '',
+            prefix = '',
+            data;
+
+          function getData(name) {
+            var file = request.getAttribute(name);
+            if (file instanceof java.io.InputStream)
+              return {
+                stream: file,
+                name: request.getAttribute(name + '__name'),
+                size: request.getAttribute(name + '__size')
+              };
+            else
+              return null;
+          }
+          while ((data = getData(fieldName + prefix + index))) {
+            files.push(data);
+            if (index === '') {
+              index = 0;
+              prefix = '@';
+            }
+            index++;
+          }
+          return files;
+        },
+<span id='ServerScript-app-method-get'>        /**
+</span>         * 获取HttpServletRequest和HttpSession对象中指定名称的属性或参数。
+         * 如果相同名称的属性或参数都存在则返回优先顺序最高的值。优先顺序依次为
+         * HttpSession的attribute，HttpServletRequest的attribute和
+         * HttpServletRequest的parameter。如果都不存在则返回null。
+         * 如果name参数缺省，将返回所有值组成的对象。
+         * @param {String} [name] 参数或属性或称。
+         * @param {Boolean} [returnString] 如果获取单个参数，false返回原始对象值，true返回原始对象转换为字符串后的值。默认为false。
+         * @return {Object} 请求对象的parameter和attribute中的值组成的对象。
+         */
+        get: function(name, returnString) {
+          if (name === undefined) {
+            //获取全部值
+            var jo = WebUtil.fetch(request),
+              result = {};
+            jo.entrySet().forEach(function(e) {
+              result[e.key] = e.value;
+            });
+            return result;
+          } else {
+            //获取单个值
+            return returnString ? WebUtil.fetch(request, name) : WebUtil.fetchObject(request, name);
+          }
+        },
+<span id='ServerScript-app-method-getBool'>        /**
+</span>         * 获取指定名称的参数，并转换为布尔类型。
+         * @param {String} name 参数名称。
+         * @return {Boolean} 参数转换后的布尔值。
+         */
+        getBool: function(name) {
+          return Wb.parseBool(app.get(name));
+        },
+<span id='ServerScript-app-method-getInt'>        /**
+</span>         * 获取指定名称的参数，并转换为整数类型。
+         * @param {String} name 参数名称。
+         * @return {Integer} 参数转换后的整数值。
+         */
+        getInt: function(name) {
+          return parseInt(app.get(name), 10);
+        },
+<span id='ServerScript-app-method-getFloat'>        /**
+</span>         * 获取指定名称的参数，并转换为浮点数类型。
+         * @param {String} name 参数名称。
+         * @return {Double} 参数转换后的浮点值。
+         */
+        getFloat: function(name) {
+          return parseFloat(app.get(name));
+        },
+<span id='ServerScript-app-method-getDate'>        /**
+</span>         * 获取指定名称的参数，并转换为日期类型。参数必须为有效日期格式的字符串。
+         * @param {String} name 参数名称。
+         * @return {Date} 参数转换后的日期值。
+         */
+        getDate: function(name) {
+          return Wb.strToDate(app.get(name, true));
+        },
+<span id='ServerScript-app-method-getJavaDate'>        /**
+</span>         * 获取指定名称的参数，并转换为日期类型。参数必须为有效日期格式的字符串。
+         * @param {String} name 参数名称。
+         * @return {Date} 参数转换后的日期值。
+         */
+        getJavaDate: function(name) {
+          return DateUtil.strToDate(app.get(name, true));
+        },
+<span id='ServerScript-app-method-has'>        /**
+</span>         * 判断指定参数是否不为空。参数是指存储在session的attribute，request的attribute或parameter中的值。
+         * @param {String} name 参数名称。
+         * @return {Boolean} 如果参数存在且其值不为空则返回true，否则返回false。
+         */
+        has: function(name) {
+          return !Wb.isEmpty(app.get(name, true));
+        },
+<span id='ServerScript-app-method-set'>        /**
+</span>         * 遍历对象，并把对象中每个条目的值设置到request的attribute对象，attribute名称为对象中条目的名称。
+         * 如果首个参数不是对象，将以第1个参数为名称，第2个参数为值，设置到attribute。
+         * @param {Object} object 设置的对象。
+         */
+        set: function(object, val) {
+          if (Wb.isObject(object)) {
+            Wb.each(object, function(k, v) {
+              request.setAttribute(k, v);
+            });
+          } else
+            request.setAttribute(object, val);
+        },
+<span id='ServerScript-app-method-perm'>        /**
+</span>         * 判断当前请求对指定模块是否可以访问。
+         * @param {String} path 模块路径或其捷径。
+         * @return {Boolean} true可以访问，false不可以访问。
+         */
+        perm: function(path) {
+          return com.wb.common.XwlBuffer.canAccess(request, path);
+        },
+<span id='ServerScript-app-method-format'>        /**
+</span>         * 根据当前语言种类格式化字符串。
+         * @param {String} format 模板字符串。
+         * @param {String...} values 格式化填充的字符串内容列表。
+         * @return {String} 格式化后的字符串。
+         */
+        format: function() {
+          return Str.langFormat(request.getAttribute('sys.useLang'),
+            arguments[0], [].slice.call(arguments, 1));
+        },
+<span id='ServerScript-app-method-getLang'>        /**
+</span>         * 根据Str.lang为当前语言代码，获取langs中对应值组成的对象。
+         * @param {Object} langs 按不同语言定义的值对象。
+         * @return {Object} 根据当前语言提取值后组成的对象。
+         */
+        getLang: function(langs) {
+          var list = {},
+            lang = app.format('lang');
+          Wb.each(langs, function(k, v) {
+            list[k] = v[lang];
+          });
+          return list;
+        },
+<span id='ServerScript-app-method-run'>        /**
+</span>         * 运行SQL语句，并获取返回结果对象。
+         * @param {String} sql 运行的SQL语句。
+         * @param {Object} [config] 配置对象。
+         * @param {String} config.jndi 数据库连接jndi。
+         * @param {String} config.arrayName 执行批处理时，指定数据源来自request中存储的该变量。
+         * @param {JSONArray/Array/String} config.arrayData 执行批处理时，指定数据源来自该值。
+         * @param {Boolean} config.batchUpdate 是否允许批处理操作。
+         * @param {String} config.type  执行何种SQL操作，可为&quot;query&quot;,&quot;update&quot;,&quot;execute&quot;,&quot;call&quot;，默认为自动。
+         * @param {String} config.transaction 执行何种数据库事务操作，可为&quot;start&quot;,&quot;commit&quot;,&quot;none&quot;。
+         * @param {String} config.isolation 数据库事务隔离级别，可为&quot;readCommitted&quot;,&quot;readUncommitted&quot;,&quot;repeatableRead&quot;,&quot;serializable&quot;。
+         * @param {Boolean} config.uniqueUpdate 指定插入、更改或删除记录操作是否有且只有1条。
+         * @return {Object} 运行SQL语句获得的结果，可能值为结果集，影响记录数或输出参数结果Map。
+         */
+        run: function(sql, config) {
+          var arrayData,
+            query = new com.wb.tool.Query();
+          if (config &amp;&amp; config.arrayData) {
+            arrayData = config.arrayData;
+            if (!(arrayData instanceof JSONArray)) {
+              if (Wb.isArray(arrayData))
+                arrayData = Wb.reverse(arrayData);
+              else
+                arrayData = new JSONArray(arrayData);
+              config.arrayData = arrayData;
+            }
+          }
+          Wb.apply(query, {
+            request: request,
+            sql: sql
+          }, config);
+          return query.run();
+        },
+<span id='ServerScript-app-method-execute'>        /**
+</span>         * 在模块内运行另外一个模块。主模块和子模块将共享request和response。
+         * @param url 运行的模块url地址。
+         */
+        execute: function(url) {
+          WebUtil.run(url, request, response);
+        },
+<span id='ServerScript-app-method-output'>        /**
+</span>         * 从数据库获取数据，并输出指定格式的脚本、图片或流数据至客户端。
+         * @param {String} sql sql语句。
+         * @param {Object} [config] 配置参数对象，见DataProvider控件的使用。
+         * @param {Boolean} [returnScript] 是否返回脚本，true返回生成的脚本，false直接输出，默认为false。
+         &amp; @return {String/undefined} 输出脚本或undefined。
+         */
+        output: function(sql, config, returnScript) {
+          var configText, dp = new com.wb.controls.DpControl();
+          dp.request = request;
+          dp.response = response;
+          if (config) {
+            Wb.each(config, function(key, value) {
+              if (Wb.isObject(value))
+                value = Wb.encode(value);
+              else value = String(value);
+              config[key] = value;
+            });
+            configText = Wb.encode(config);
+          } else
+            configText = '{}';
+          dp.configs = new JSONObject(configText);
+          dp.configs.put('sql', sql);
+          if (returnScript)
+            return dp.getContent(false);
+          else
+            dp.create();
+        },
+<span id='ServerScript-app-method-getData'>        /**
+</span>         * 获取由SQL生成的数据对象。详见app.output方法的说明。
+         * @param {String} sql sql语句。
+         * @param {Object} [config] 配置参数对象，见DataProvider控件的使用。
+         &amp; @return {Object} 数据对象。
+         */
+        getData: function(sql, config) {
+          return Wb.decode(app.output(sql, config, true));
+        },
+<span id='ServerScript-app-method-update'>        /**
+</span>         * 执行上下文绑定的insert, update, delete数据库更新操作。
+         * @param {Object} config 配置参数对象，见Updater控件的使用。
+         */
+        update: function(configs) {
+          var updater = new com.wb.tool.Updater();
+
+          Wb.apply(updater, {
+            request: request,
+            fieldsMap: configs.fieldsMap ? new JSONObject(Wb.encode(configs.fieldsMap)) : null
+          }, configs);
+          updater.run();
+        }
+      };
+      </pre>
+</body>
+</html>

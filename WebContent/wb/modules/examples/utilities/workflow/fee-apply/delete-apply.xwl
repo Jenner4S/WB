@@ -1,0 +1,1 @@
+{"hidden":false,"children":[{"configs":{"serverScript":"app.update({\n  tableName: 'WB_ROUTE',\n  whereFields: 'ROUTE_ID'\n});","itemId":"module"},"expanded":true,"children":[],"type":"module"}],"roles":{},"title":"删除申请","iconCls":"","inframe":false,"pageLink":""}

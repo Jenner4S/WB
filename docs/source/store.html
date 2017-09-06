@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='DataAccess-store'>/**
+</span> * @class DataAccess.store
+ * 
+ * 数据集控件，可以方便从服务器端或客户端取数。表格、图表或下拉框可以从该控件获取数据并进行展现。
+ * 该控件封装了Ext.data.Store及其相关子类，扩展属性在本文档中说明，其他属性请参考Ext JS文档说明。
+ */
+var store = {
+<span id='DataAccess-store-cfg-autoAbort'>  /**
+</span>   * @cfg {Boolean} autoAbort
+   * 当发起新的请求时，如果上次请求仍未结束，是否自动中止上次请求。被中止的请求不发触发任何事件。
+   */
+  autoAbort: true,
+
+<span id='DataAccess-store-cfg-createInstance'>  /**
+</span>   * @cfg {Boolean} createInstance
+   * 是否创建对象的实例，如果设置为false只创建对象表达式。
+   */
+  createInstance: true,
+
+<span id='DataAccess-store-cfg-isConfig'>  /**
+</span>   * @cfg {Boolean} isConfig
+   * 指定该控件是否作为父控件的配置项。true作为父控件的配置项，false作为父控件的子控件。
+   * 如果值为true，该控件的对象表达式将添加到父控件的以该控件itemId属性值为名称的属性下。
+   */
+  isConfig: 'auto',
+
+<span id='DataAccess-store-cfg-mask'>  /**
+</span>   * @cfg {Component/Function} mask
+   * 当store加载过程中，mask指定的控件加盖屏蔽图层并显示加载过程的提示性文本。如果mask为函数将执行该函数并取其返回值为mask。
+   * 默认加盖整个窗口。
+   */
+
+<span id='DataAccess-store-cfg-maskBindObject'>  /**
+</span>   * @cfg {Boolean} maskBindObject
+   * 当store加载过程中，是否对其关联的控件加mask。比如store关联了表格，在store加载过程中，表格将加mask显示。
+   */
+  maskBindObject: false,
+
+<span id='DataAccess-store-cfg-message'>  /**
+</span>   * @cfg {String} message
+   * 如果使用了mask，指定在mask上显示的文字。
+   */
+
+<span id='DataAccess-store-cfg-normalName'>  /**
+</span>   * @cfg {String} normalName
+   * 在命名空间下指向该对象的变量名称，可以通过app.normalName访问该对象。
+   * 如果该值为空，normalName取自itemId属性值。
+   */
+  normalName: undefined,
+
+<span id='DataAccess-store-cfg-params'>  /**
+</span>   * @cfg {Object} params
+   * store在加载过程中提交到后台的静态参数对象，如{foo:'bar',other: 123}。
+   */
+
+<span id='DataAccess-store-cfg-showError'>  /**
+</span>   * @cfg {Boolean} showError
+   * 当store加载过程中发生错误时，是否显示错误信息。
+   */
+  showError: true,
+
+<span id='DataAccess-store-cfg-showMask'>  /**
+</span>   * @cfg {Boolean} showMask
+   * store在加载过程中是否显示mask，mask是指加盖在指定对象上的屏蔽图层。
+   */
+  showMask: true,
+
+<span id='DataAccess-store-cfg-tagConfigs'>  /**
+</span>   * @cfg {Object} tagConfigs
+   * 对象或任意的脚本添加到该控件的配置项中。如设置为{foo: 'bar'}将为该控件增加配置项foo，其值为bar。
+   */
+  tagConfigs: undefined
+
+<span id='DataAccess-store-event-failure'>  /**
+</span>   * @event failure
+   * store加载过程中发生异常触发的事件。
+   * @param {Ext.data.Store} store store对象。
+   * @param {Ext.data.Model[]} records 记录集。
+   * @param {Object} options 事件的选项对象。
+   */
+
+<span id='DataAccess-store-event-success'>  /**
+</span>   * @event success
+   * store加载成功后触发的事件。
+   * @param {Ext.data.Store} store store对象。
+   * @param {Ext.data.Model[]} records 记录集。
+   * @param {Object} options 事件的选项对象。
+   */
+
+<span id='DataAccess-store-event-tagEvents'>  /**
+</span>   * @event tagEvents
+   * 对象或任意的脚本添加到该控件的事件中。如设置为{destroy: app.destroyHandler}将为该控件增加destroy事件时执行app.destroyHandler方法。
+   */
+};</pre>
+</body>
+</html>

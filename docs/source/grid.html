@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='ListView-grid'>/**
+</span> * @class ListView.grid
+ * 
+ * 表格控件，用以表格的形式显示数据。
+ * 该控件封装了Ext.grid.Panel类，扩展属性在本文档中说明，其他属性请参考Ext JS文档说明。
+ */
+var grid = {
+<span id='ListView-grid-cfg-autoRowNumWidth'>  /**
+</span>   * @cfg {Boolean} autoRowNumWidth
+   * 是否自动根据行号列内容的宽度调整列宽度大小。
+   */
+  autoRowNumWidth: false,
+
+<span id='ListView-grid-cfg-barExportAllButtons'>  /**
+</span>   * @cfg {Boolean} barExportAllButtons
+   * 指定表格工具条中导出全部数据至Excel、文本和预览菜单是否可见。
+   */
+  barExportAllButtons: true,
+
+<span id='ListView-grid-cfg-barExportButtons'>  /**
+</span>   * @cfg {Boolean} barExportButtons
+   * 指定表格工具条中导出数据至Excel、文本和预览菜单是否可见。
+   */
+  barExportButtons: true,
+
+<span id='ListView-grid-cfg-barInfoLabel'>  /**
+</span>   * @cfg {Boolean} barInfoLabel
+   * 指定表格工具条中显示记录数量的标签是否可见。
+   */
+  barInfoLabel: true,
+
+<span id='ListView-grid-cfg-barNavigateButtons'>  /**
+</span>   * @cfg {Boolean} barNavigateButtons
+   * 指定表格工具条中记录导航按钮是否可见。
+   */
+  barNavigateButtons: true,
+
+<span id='ListView-grid-cfg-barPageButton'>  /**
+</span>   * @cfg {Boolean} barPageButton
+   * 指定表格工具条中分页按钮是否可见。
+   */
+  barPageButton: true,
+
+<span id='ListView-grid-cfg-barRefreshButton'>  /**
+</span>   * @cfg {Boolean} barRefreshButton
+   * 指定表格工具条中刷新按钮是否可见。
+   */
+  barRefreshButton: true,
+
+<span id='ListView-grid-cfg-bottomHtml'>  /**
+</span>   * @cfg {String} bottomHtml
+   * 底部的HTML脚本。通常为&lt;table&gt;...&lt;/table&gt;，用于定义报表底部的标签。
+   */
+
+<span id='ListView-grid-cfg-createInstance'>  /**
+</span>   * @cfg {Boolean} createInstance
+   * 是否创建对象的实例，如果设置为false只创建对象表达式。
+   */
+  createInstance: true,
+
+<span id='ListView-grid-cfg-exportFilename'>  /**
+</span>   * @cfg {String} exportFilename
+   * 导出表格中的数据到客户端时使用的文件名称。
+   */
+
+<span id='ListView-grid-cfg-exportTitle'>  /**
+</span>   * @cfg {String} exportTitle
+   * 导出表格中的数据时使用的标题。
+   */
+
+<span id='ListView-grid-cfg-gridLine'>  /**
+</span>   * @cfg {Boolean} gridLine
+   * 是否显示表格的网络线。
+   */
+  gridLine: false,
+
+<span id='ListView-grid-cfg-loadColumns'>  /**
+</span>   * @cfg {String} loadColumns
+   * 表格中的列模型加载模式。有效值为：
+   *
+   *   - `'reload'` : 重复加载模式。每次在表格关联的store加载成功后，根据store返回的列模型数据重新加载表格中的列模型。
+   *   - `'auto'` : 自动加载列模式。同reload的区别在于，如果表格列模型已经存在，那么在表格关联的store加载成功后不再重新加载列模型。
+   *   - `'none'` : 不加载列。无论表格列模型是否存在均不自动加载列模型。可以通过代码或配置的方式来加载列模型。
+   */
+  loadColumns: 'auto',
+
+<span id='ListView-grid-cfg-isConfig'>  /**
+</span>   * @cfg {Boolean} isConfig
+   * 指定该控件是否作为父控件的配置项。true作为父控件的配置项，false作为父控件的子控件。
+   * 如果值为true，该控件的对象表达式将添加到父控件的以该控件itemId属性值为名称的属性下。
+   */
+  isConfig: 'auto',
+
+<span id='ListView-grid-cfg-mergeRows'>  /**
+</span>   * @cfg {Boolean} mergeRows
+   * 指定该表格是否合并具有相同值的多行单元格为一个单元格，只有设置为mergeRows为true的列才执行该操作。
+   */
+  mergeRows: false,
+
+<span id='ListView-grid-cfg-normalName'>  /**
+</span>   * @cfg {String} normalName
+   * 在命名空间下指向该对象的变量名称，可以通过app.normalName访问该对象。
+   * 如果该值为空，normalName取自itemId属性值。
+   */
+  normalName: undefined,
+
+<span id='ListView-grid-cfg-pagingBar'>  /**
+</span>   * @cfg {Boolean} pagingBar
+   * 指定表格的分页工具条是否可见。分布工具条通常位于表格底部，具有分页导航和数据导出等按钮和菜单。
+   */
+  pagingBar: true,
+
+<span id='ListView-grid-cfg-popupMenu'>  /**
+</span>   * @cfg {Ext.menu.Menu} popupMenu
+   * 设置该对象关联的上下文菜单，通常点击右键时弹出关联的菜单。
+   */
+  popupMenu: undefined,
+
+<span id='ListView-grid-cfg-renderRaw'>  /**
+</span>   * @cfg {Boolean} renderRaw
+   * 是否显示原始的HTML数据。true以原始的HTML展现，false把HTML转义后展现。
+   */
+  renderRaw: false,
+
+<span id='ListView-grid-cfg-rowNumber'>  /**
+</span>   * @cfg {Boolean} rowNumber
+   * 指定表格的列模型中是否自动生成序号列。
+   */
+  rowNumber: true,
+
+<span id='ListView-grid-cfg-submitSelect'>  /**
+</span>   * @cfg {Boolean} submitSelect
+   * 当获取表格中的数据时，是否仅提交其选择行的数据。通常可使用grid.getValue()，Wb.getValue(grid)或指定out参数等方法来获取表格中的数据。
+   * 表格中的数据获取后放到由对象组成的数组中，每个对象对应一条记录，记录中字段名称加#前缀的字段值为未修改前的原始值。
+   * false提交所有行的数据，true提交选择行的数据。
+   */
+  submitSelect: true,
+
+<span id='ListView-grid-cfg-tagConfigs'>  /**
+</span>   * @cfg {Object} tagConfigs
+   * 对象或任意的脚本添加到该控件的配置项中。如设置为{foo: 'bar'}将为该控件增加配置项foo，其值为bar。
+   */
+  tagConfigs: undefined
+
+<span id='ListView-grid-event-tagEvents'>  /**
+</span>   * @event tagEvents
+   * 对象或任意的脚本添加到该控件的事件中。如设置为{destroy: app.destroyHandler}将为该控件增加destroy事件时执行app.destroyHandler方法。
+   */
+
+<span id='ListView-grid-cfg-topHtml'>  /**
+</span>   * @cfg {String} topHtml
+   * 顶部的HTML脚本。通常为&lt;table&gt;...&lt;/table&gt;，用于定义报表顶部的标题和标签。
+   */
+};</pre>
+</body>
+</html>

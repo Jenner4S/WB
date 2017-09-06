@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='ListView-column'>/**
+</span> * @class ListView.column
+ * 
+ * 表格或树列模型中的列控件，用于定义列模型列表中的某个列。
+ * 该控件封装了Ext.grid.column.Column及其相关的子类，扩展属性在本文档中说明，其他属性请参考Ext JS文档说明。
+ */
+var column = {
+<span id='ListView-column-cfg-allowExport'>  /**
+</span>   * @cfg {Boolean} allowExport
+   * 指定该列是否允许在导出表格数据时被导出。
+   */
+  allowExport: true,
+
+<span id='ListView-column-cfg-autoWrap'>  /**
+</span>   * @cfg {Boolean} autoWrap
+   * 当列中的内容超过列宽度时，是否允许自动换行。
+   */
+  autoWrap: false,
+
+<span id='ListView-column-cfg-createInstance'>  /**
+</span>   * @cfg {Boolean} createInstance
+   * 是否创建对象的实例，如果设置为false只创建对象表达式。
+   */
+  createInstance: true,
+
+<span id='ListView-column-cfg-exportText'>  /**
+</span>   * @cfg {String} exportText
+   * 导出时使用的列标题，默认为使用text属性。
+   */
+
+<span id='ListView-column-cfg-isConfig'>  /**
+</span>   * @cfg {Boolean} isConfig
+   * 指定该控件是否作为父控件的配置项。true作为父控件的配置项，false作为父控件的子控件。
+   * 如果值为true，该控件的对象表达式将添加到父控件的以该控件itemId属性值为名称的属性下。
+   */
+  isConfig: 'auto',
+
+<span id='ListView-column-cfg-keyName'>  /**
+</span>   * @cfg {String} keyName
+   * 设置关联的键名，键名是指键值编辑器中配置的键值列表名称。指定键名后，会自动把列关联的值作为K值，并以V值显示结果。
+   * 键名和renderer为互拆属性，指定一个另一个失效。如果要使两个设置均生效，可以参考grid/highlight.xwl示例的实现。
+   */
+
+<span id='ListView-column-cfg-mergeColGroup'>  /**
+</span>   * @cfg {String} mergeColGroup
+   * 合并组的名称，只有相邻且合并组名称相同的列才会被跨列合并单元格。
+   */
+
+<span id='ListView-column-cfg-mergeRows'>  /**
+</span>   * @cfg {Boolean} mergeRows
+   * 指定该列具有相同值的多行单元格是否合并为一个单元格。该属性仅当列所在表格的mergeRows属性为true时有效。
+   */
+  mergeRows: false,
+
+<span id='ListView-column-cfg-normalName'>  /**
+</span>   * @cfg {String} normalName
+   * 在命名空间下指向该对象的变量名称，可以通过app.normalName访问该对象。
+   * 如果该值为空，normalName取自itemId属性值。
+   */
+  normalName: undefined,
+
+<span id='ListView-column-cfg-showInMenu'>  /**
+</span>   * @cfg {Boolean} showInMenu
+   * 指定该列是否在关联的列菜单中显示。
+   */
+  showInMenu: true,
+
+<span id='ListView-column-cfg-tagConfigs'>  /**
+</span>   * @cfg {Object} tagConfigs
+   * 对象或任意的脚本添加到该控件的配置项中。如设置为{foo: 'bar'}将为该控件增加配置项foo，其值为bar。
+   */
+  tagConfigs: undefined
+
+<span id='ListView-column-cfg-titleAlign'>  /**
+</span>   * @cfg {String} titleAlign
+   * 列标题显示的文字对齐方式，有效值为：
+   *
+   *   - `'left'` : 列标题左对齐。
+   *   - `'center'` : 列标题居中对齐。
+   *   - `'right'` : 列标题右对齐。
+   *
+   * 默认为根据align设置的对齐方式。
+   */
+
+<span id='ListView-column-event-tagEvents'>  /**
+</span>   * @event tagEvents
+   * 对象或任意的脚本添加到该控件的事件中。如设置为{destroy: app.destroyHandler}将为该控件增加destroy事件时执行app.destroyHandler方法。
+   */
+};</pre>
+</body>
+</html>

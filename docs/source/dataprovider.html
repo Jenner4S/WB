@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='DataAccess-dataprovider'>/**
+</span> * @class DataAccess.dataprovider
+ * 
+ * 数据库数据生成控件，用于把数据库数据转换为指定格式的JSON脚本，图片或二进制流等数据。
+ * 通过该控件可以方便地从数据库表、SQL或过程提取数据，并生成目标格式的数据。
+ * 在ServerScript中可以使用app.output方法完成相同的功能。
+ */
+var dataprovider = {
+
+<span id='DataAccess-dataprovider-cfg-autoPage'>  /**
+</span>   * @cfg {Boolean} autoPage
+   * 是否根据前台提交的start和limit参数自动在应用服务器端分页。如果存在这两个参数，系统会自动使用游标来进行分页。
+   * 如果数据库返回大量数据建议使用数据库端分页，并设置此参数为false。
+   */
+  autoPage: true,
+
+<span id='DataAccess-dataprovider-cfg-createColumns'>  /**
+</span>   * @cfg {Boolean} createColumns
+   * 是否根据数据源的元数据或字典信息创建对应的列模型。列模型可应用于表格等控件，以自动生成表格列。
+   */
+  createColumns: true,
+
+<span id='DataAccess-dataprovider-cfg-createKeyValues'>  /**
+</span>   * @cfg {Boolean} createKeyValues
+   * 是否输出键值字段。如果字段在数据字典中被设置有键名称，设置该属性为true后，系统将输出名为“字段名称__V”的字段，其值为对应的键值。
+   * 该属性仅当设置有dictTableNames属性时有效。
+   */
+  createKeyValues: false,
+
+<span id='DataAccess-dataprovider-cfg-dictFieldsMap'>  /**
+</span>   * @cfg {Object} dictFieldsMap
+   * 指定数据源中的字段与字典表的对应关系。用于使用多个字典表时，重名字段的表名指定。
+   * 比如dictTableNames中设置table1,table2，两个表均定义有field1字典信息，可以通过设置该属性为{field1:'table2'}
+   * 来指定字段field1使用table2的field1字段的字典信息。
+   */
+
+<span id='DataAccess-dataprovider-cfg-dictTableNames'>  /**
+</span>   * @cfg {String} dictTableNames
+   * 数据字典表名列表，多个表名以“,”分隔。用于使数据源中的字段元数据信息对应到字典表中的同名字段设置的字典信息。
+   * 数据库实体表名无须对应到指定的字典表，因为字典信息仅通过字段名称来进行对照和识别，因此相同的字典表可以应用到不同的实体表中。
+   * 如果指定多个字典表时存在重复的字段，可以通过设置dictFieldsMap属性来区分。
+   */
+
+<span id='DataAccess-dataprovider-cfg-disabled'>  /**
+</span>   * @cfg {Boolean} disabled
+   * 是否禁用该控件。
+   */
+  disabled: false,
+
+<span id='DataAccess-dataprovider-cfg-fields'>  /**
+</span>   * @cfg {Array} fields
+   * 字段元数据定义，定义的字段元数据将覆盖系统自动生成的元数据。设置为&quot;-&quot;将不生成定义。
+   */
+
+<span id='DataAccess-dataprovider-cfg-fieldsTag'>  /**
+</span>   * @cfg {Array} fieldsTag
+   * 字段元数据定义附加项，定义的脚本将直接输出至字段定义。
+   */
+
+<span id='DataAccess-dataprovider-cfg-itemId'>  /**
+</span>   * @cfg {String} itemId
+   * 用以标识控件的名称。
+   */
+
+<span id='DataAccess-dataprovider-cfg-jndi'>  /**
+</span>   * @cfg {String} jndi
+   * 数据库连接jndi变量名称。变量名称在变量配置模块sys.jndi目录内预定义，其值为jndi全名。
+   */
+
+
+<span id='DataAccess-dataprovider-cfg-keyDefines'>  /**
+</span>   * @cfg {Object} keyDefines
+   * 字段使用的键值名称对象。比如设置为{field1:'sex', field2:'nation'}，表示字段field1使用sex键名，field2使用nation键名。
+   */
+
+<span id='DataAccess-dataprovider-cfg-limitExportRecords'>  /**
+</span>   * @cfg {Integer} limitExportRecords
+   * 导出时默认最多允许单次输出到客户端的记录数。
+   */
+
+<span id='DataAccess-dataprovider-cfg-limitRecords'>  /**
+</span>   * @cfg {Integer} limitRecords
+   * 查询时默认最多允许单次输出到客户端的记录数。
+   */
+
+<span id='DataAccess-dataprovider-cfg-loadParams'>  /**
+</span>   * @cfg {String} loadParams
+   * 是否自动加载sql生成的输出参数，有效值为&quot;auto&quot;,&quot;load&quot;,&quot;none&quot;，默认为auto。
+   *
+   *     auto：如果SQL返回结果集则不读取输出参数，否则读取所有输出参数到request对象。
+   *     load：读取所有输出参数到request对象，可以通过request.getAttribute(paramName)/app.get(paramName)取值。
+   *     none：不读取输出参数。如果SQL返回输出参数，可以通过app.get('outParams')方法获取statement对象，该对象系统会自动关闭。
+   *
+   */
+
+<span id='DataAccess-dataprovider-cfg-orderFields'>  /**
+</span>   * @cfg {Object} orderFields
+   * 当使用{#sql.orderBy#}自动生成排序SQL表达式时，如果多表关联存在重名字段，字段与表别名的对应关系对象。
+   * 比如设置为{field1: 'a', default: 'b'}，表示field1排序时取表别名a(order by a.field1)，其他字段排序时取表别名b。
+   */
+
+<span id='DataAccess-dataprovider-cfg-resultName'>  /**
+</span>   * @cfg {String} resultName
+   * 如果使用存储过程获取数据源，默认获取输出参数名称为该值的参数作为结果集。
+   * 如果该参数不存在，系统将获取存储过程的返回值作为结果集。
+   */
+  resultName: 'result',
+
+<span id='DataAccess-dataprovider-cfg-sql'>  /**
+</span>   * @cfg {String} sql
+   * 用于生成数据源的SQL语句。SQL语句可以为任意有效的SQL语句，包括对存储过程或函数访问的SQL。
+   *
+   *     使用select语句：select * from table
+   *     获取存储过程的返回值为结果集：{call myProc}
+   *     访问oracle存储过程，并取名称为result的输出参数作为结果集：{call myProc({?@-10.result?}, '输入参数值')}
+   *
+   * 如果取存储过程的输出参数作为结果集，参数名称由resultName属性指定。
+   */
+
+
+<span id='DataAccess-dataprovider-cfg-tag'>  /**
+</span>   * @cfg {String} tag
+   * 任意附加脚本直接添加到返回值的根节点。
+   */
+
+<span id='DataAccess-dataprovider-cfg-totalLoadParams'>  /**
+</span>   * @cfg {String} totalLoadParams
+   * 是否自动加载totalSql生成的输出参数，有效值为&quot;auto&quot;,&quot;load&quot;,&quot;none&quot;，默认为auto。
+   *
+   *     auto：如果SQL返回结果集则不读取输出参数，否则读取所有输出参数到request对象。
+   *     load：读取所有输出参数到request对象，可以通过request.getAttribute(paramName)/app.get(paramName)取值。
+   *     none：不读取输出参数。如果SQL返回输出参数，可以通过app.get('outParams')方法获取statement对象，该对象系统会自动关闭。
+   *
+   */
+
+<span id='DataAccess-dataprovider-cfg-totalSql'>  /**
+</span>   * @cfg {String} totalSql
+   * 用于获取记录总数的SQL语句。其用法见DataAccess.dataprovider.sql。
+   */
+
+<span id='DataAccess-dataprovider-cfg-type'>  /**
+</span>   * @cfg {String} type
+   * 指定数据源输出内容的类型。有效值为：
+   *
+   *   - `'array'` : 把结果集按DataAccess.store适配的格式输出。
+   *   - `'object'` : 把结果集首行按JsonObject格式输出。
+   *   - `'tree'` : 把结果集按DataAccess.treestore适配的格式输出。
+   *   - `'download'` : 把结果集首行记录首个BLOB字段以force-download内容类型输出至客户端。如果记录存在第2个字段，作为输出的文件名，如果记录存在第3个字段，作为输出内容的长度。
+   *   - `'stream'` : 把结果集首行记录首个BLOB字段以octet-stream内容类型输出至客户端。如果记录存在第2个字段，作为输出的文件名，如果记录存在第3个字段，作为输出内容的长度。
+   *   - `'image'` : 把结果集首行记录首个BLOB字段以图像内容类型输出至客户端。如果记录存在第2个字段，作为输出的文件名，如果记录存在第3个字段，作为输出内容的长度。如果第2个字段未指定文件名称，默认为image/jpg类型。
+   *   - `'其他'` : 把结果集首行记录首个BLOB字段以type值指定的内容类型输出至客户端。如果记录存在第2个字段，作为输出的文件名，如果记录存在第3个字段，作为输出内容的长度。如设置为image/png。
+   */
+  type: 'array'
+};</pre>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"hidden":false,"children":[{"configs":{"serverScript":"app.update({\n  tableName: 'BRAINSCHOOL_BUS_CUSTOMER_LINKMAN'\n});","itemId":"module"},"expanded":false,"children":[],"type":"module"}],"roles":{},"title":"删除","iconCls":"","inframe":false,"pageLink":""}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='General-module'>/**
+</span> * @class General.module
+ * 
+ * 模块控件，每个模块都具有的根节点控件，用于设置整个模块相关的属性。
+ */
+var module = {
+<span id='General-module-cfg-createFrame'>  /**
+</span>   * @cfg {Boolean} createFrame
+   * 是否创建HTML页面的框架脚本，包括引入JS/CSS链接。如果需要自定义页面的输出不需要创建默认的页面框架，可以设置该属性为false。
+   */
+  createFrame: true,
+
+<span id='General-module-cfg-cssLinks'>  /**
+</span>   * @cfg {Array} cssLinks
+   * 需要在页面中引用的css链接列表。该属性仅在首页或在iframe中运行的模块内有效，内置模块页面引用css请使用Wb.addLink方法。
+   */
+
+<span id='General-module-cfg-description'>  /**
+</span>   * @cfg {String} description
+   * 对模块的任意描述性文本，用于对模块进行备注或说明。
+   */
+
+<span id='General-module-cfg-finalHtml'>  /**
+</span>   * @cfg {String} finalHtml
+   * 输出至页面最末尾处的HTML脚本片段。
+   */
+
+<span id='General-module-cfg-head'>  /**
+</span>   * @cfg {String} head
+   * 任意脚本内容，输出至HTML页面的head标签内。
+   */
+
+<span id='General-module-cfg-importModules'>  /**
+</span>   * @cfg {Array} importModules
+   * 导入的模块列表，这些模块将在后台依次被执行，如果产生客户端脚本将合并到主页面中。
+   */
+
+<span id='General-module-cfg-initHtml'>  /**
+</span>   * @cfg {String} initHtml
+   * 输出至页面最开始处的HTML脚本片段。
+   */
+
+<span id='General-module-cfg-initScript'>  /**
+</span>   * @cfg {String} initScript
+   * 使用JavaScript语法进行编程的服务器端代码，当模块被请求时最先执行的服务器端代码。可引用参数request, response和app，分别代表
+   * javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse和app对象。
+   */
+
+<span id='General-module-cfg-itemId'>  /**
+</span>   * @cfg {String} itemId
+   * 用以标识模块的名称，如果itemId不为“module”，将创建全局的命名空间。比如设置itemId为foo.bar.dialog后，可通过foo.bar.dialog.*来访问指定的对象。
+   */
+
+<span id='General-module-cfg-jsLinks'>  /**
+</span>   * @cfg {Array} jsLinks
+   * 需要在页面中引用的js链接列表。该属性仅在首页或在iframe中运行的模块内有效，内置模块页面引用js请使用Wb.addLink方法。
+   */
+
+<span id='General-module-cfg-loadJS'>  /**
+</span>   * @cfg {String} loadJS
+   * 指定需要加载的预定义客户端js/css库链接，可选项为:
+   * &lt;table&gt;
+   * &lt;tr&gt;&lt;td&gt;值&lt;/td&gt;&lt;td&gt;描述&lt;/td&gt;&lt;/tr&gt;
+   * &lt;tr&gt;&lt;td&gt;ext&lt;/td&gt;&lt;td&gt;加载ExtJS相关的js和css链接。&lt;/td&gt;&lt;/tr&gt;
+   * &lt;tr&gt;&lt;td&gt;touch&lt;/td&gt;&lt;td&gt;加载Touch相关的js和css链接。&lt;/td&gt;&lt;/tr&gt;
+   * &lt;tr&gt;&lt;td&gt;bootstrap&lt;/td&gt;&lt;td&gt;加载Bootstrap相关的js和css链接。&lt;/td&gt;&lt;/tr&gt;
+   * &lt;tr&gt;&lt;td&gt;ext+bootstrap&lt;/td&gt;&lt;td&gt;加载ExtJS和Bootstrap相关的js和css链接。&lt;/td&gt;&lt;/tr&gt;
+   * &lt;tr&gt;&lt;td&gt;touch+bootstrap&lt;/td&gt;&lt;td&gt;加载Touch和Bootstrap相关的js和css链接。&lt;/td&gt;&lt;/tr&gt;
+   * &lt;tr&gt;&lt;td&gt;jquery&lt;/td&gt;&lt;td&gt;加载jQuery相关的链接。&lt;/td&gt;&lt;/tr&gt;
+   * &lt;tr&gt;&lt;td&gt;core&lt;/td&gt;&lt;td&gt;加载WebBuilder最核心的客户端库链接。&lt;/td&gt;&lt;/tr&gt;
+   * &lt;/table&gt;
+   * 默认为自动根据使用的控件加载相关的客户端类库链接。
+   * 自定义加载可设置{@link #cssLinks}或{@link #jsLinks}属性。
+   */
+
+<span id='General-module-cfg-logMessage'>  /**
+</span>   * @cfg {String} logMessage
+   * 访问该模块时该信息将被记录到数据库日志表中。例如设置该值为“删除{#param#}”。
+   */
+
+<span id='General-module-cfg-loginRequired'>  /**
+</span>   * @cfg {Boolean} loginRequired
+   * 指定是否需要登录后才可以访问该模块。
+   */
+  loginRequired: true
+
+<span id='General-module-cfg-method'>  /**
+</span>   * @cfg {String} method
+   * 访问该模块时客户端必须使用的请求方法，只有客户端的请求方法同该值一致，模块才被允许访问。有效的值可以为GET, POST, PUT, DELETE或其他任意值。
+   * 如果该值为空表示接受客户端任意的请求方法。
+   */
+
+<span id='General-module-cfg-serverMethod'>  /**
+</span>   * @cfg {String} serverMethod
+   * 访问该模块时在后台执行的服务器端Java方法全名，方法原型为：
+   *
+   *     public static void methodName(HttpServletRequest request, HttpServletResponse response) throws Exception {}
+   *
+   * 如设置方法名为com.wb.interact.DBE.getTree
+   */
+
+<span id='General-module-cfg-serverScript'>  /**
+</span>   * @cfg {String} serverScript
+   * 使用JavaScript语法进行编程的服务器端代码，可引用参数request, response和app，分别代表
+   * javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse和app对象。
+   * 在相关服务器端属性的处理顺序上，先后顺序依次为initScript, serverMethod, importModules, serverScript。
+   * 可以通过添加serverScript控件并调整控件的顺序来控制脚本的执行顺序。
+   */
+
+<span id='General-module-cfg-tagConfigs'>  /**
+</span>   * @cfg {String} tagConfigs
+   * 任意脚本内容，直接输出到HTML页面的body标签中。
+   */
+
+<span id='General-module-cfg-title'>  /**
+</span>   * @cfg {String} title
+   * 输出到HTML页面的标题，默认为模块的标题。
+   */
+
+<span id='General-module-cfg-tokens'>  /**
+</span>   * @cfg {String} tokens
+   * 以逗号分隔的任意字符列表，用以校验客户端提交的“_token”参数值是否包含在列表中，如果参数值在列表中模块无需登录即可被访问。
+   */
+
+<span id='General-module-event-beforeunload'>  /**
+</span>   * @event beforeunload
+   * 客户端HTML页面被关闭或重新加载时执行的事件。返回非null和undefined值会在页面被关闭或重新加载前提示确认。见window的beforeunload事件。
+   */
+
+<span id='General-module-event-finalize'>  /**
+</span>   * @event finalize
+   * 客户端HTML页面中最后被执行的JavaScript脚本。因为JavaScript中的代码可以异步执行，因此不要依赖此事件执行需要最后运行的代码。
+   * 可以通过监听相关对象的回调方法来执行，比如把代码放到store的success事件中执行。
+   */
+};</pre>
+</body>
+</html>

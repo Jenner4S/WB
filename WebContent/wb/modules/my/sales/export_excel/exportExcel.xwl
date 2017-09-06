@@ -1,0 +1,1 @@
+{"hidden":true,"children":[{"configs":{"itemId":"module","serverMethod":"com.shylsoft.excel.ExcelUtils.getExcel"},"expanded":false,"children":[],"type":"module"}],"roles":{"default":1,"manager":1,"user":1},"title":"生成合同","iconCls":"","inframe":false,"pageLink":""}

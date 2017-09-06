@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='General-label'>/**
+</span> * @class General.label
+ * 
+ * 标签控件，可以显示纯文或HTML。
+ * 该控件封装了Ext.form.Label类，扩展属性在本文档中说明，其他属性请参考Ext JS文档说明。
+ */
+var label = {
+<span id='General-label-cfg-createInstance'>  /**
+</span>   * @cfg {Boolean} createInstance
+   * 是否创建对象的实例，如果设置为false只创建对象表达式。
+   */
+  createInstance: true,
+
+<span id='General-label-cfg-isConfig'>  /**
+</span>   * @cfg {Boolean} isConfig
+   * 指定该控件是否作为父控件的配置项。true作为父控件的配置项，false作为父控件的子控件。
+   * 如果值为true，该控件的对象表达式将添加到父控件的以该控件itemId属性值为名称的属性下。
+   */
+  isConfig: 'auto',
+
+<span id='General-label-cfg-normalName'>  /**
+</span>   * @cfg {String} normalName
+   * 在命名空间下指向该对象的变量名称，可以通过app.normalName访问该对象。
+   * 如果该值为空，normalName取自itemId属性值。
+   */
+  normalName: undefined,
+
+<span id='General-label-cfg-tagConfigs'>  /**
+</span>   * @cfg {Object} tagConfigs
+   * 对象或任意的脚本添加到该控件的配置项中。如设置为{foo: 'bar'}将为该控件增加配置项foo，其值为bar。
+   */
+  tagConfigs: undefined
+
+<span id='General-label-event-tagEvents'>  /**
+</span>   * @event tagEvents
+   * 对象或任意的脚本添加到该控件的事件中。如设置为{destroy: app.destroyHandler}将为该控件增加destroy事件时执行app.destroyHandler方法。
+   */
+};</pre>
+</body>
+</html>

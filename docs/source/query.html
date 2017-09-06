@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='DataAccess-query'>/**
+</span> * @class DataAccess.query
+ * 
+ * 数据库SQL访问控件，用于执行任意的SQL语句，包括对存储过程和函数的访问。
+ * 该控件区别于DataAccess.dataprovider控件，只执行SQL而不输出任何结果。
+ * 该控件执行后，其返回结果和输出参数存储在HttpServletRequest对象的attribute中。
+ * 在ServerScript中可以使用app.run方法完成相同的功能。
+ */
+var query = {
+<span id='DataAccess-query-cfg-arrayName'>  /**
+</span>   * @cfg {String} arrayName
+   * 用于批处理的前台提交的参数名称。如果指定该名称，系统将取该名称的参数值，并把值转换为数组，作为批处理的数据源。
+   * 参数值的数据格式如下：
+   *
+   *     [{field1:'foo',field2:123},{field1:'abc',field2:456}]
+   *
+   * 使用此属性可以方便地完成SQL的批处理，完成批量数据的增删改。
+   */
+
+<span id='DataAccess-query-cfg-batchUpdate'>  /**
+</span>   * @cfg {Boolean} batchUpdate
+   * 是否使用数据库内置的批处理功能处理arrayName指定的批数据。
+   * true使用数据库内置的批处理功能，false使用循环执行SQL语句。
+   * 如果使用batchUpdate，uniqueUpdate属性将无效。
+   */
+  batchUpdate: false,
+
+<span id='DataAccess-query-cfg-disabled'>  /**
+</span>   * @cfg {Boolean} disabled
+   * 是否禁用该控件。
+   */
+  disabled: false,
+
+<span id='DataAccess-query-cfg-errorText'>  /**
+</span>   * @cfg {String} errorText
+   * 如果指定该值且查询结果集不为空，系统将抛出该信息的异常。
+   */
+
+
+<span id='DataAccess-query-cfg-isolation'>  /**
+</span>   * @cfg {String} isolation
+   * 如果启用事务指定事务的隔离程度。有效值为readCommitted, readUncommitted, repeatableRead和serializable。
+   */
+
+<span id='DataAccess-query-cfg-itemId'>  /**
+</span>   * @cfg {String} itemId
+   * 用以标识控件的名称。
+   */
+
+<span id='DataAccess-query-cfg-jndi'>  /**
+</span>   * @cfg {String} jndi
+   * 数据库连接jndi变量名称。变量名称在变量配置模块sys.jndi目录内预定义，其值为jndi全名。
+   */
+
+<span id='DataAccess-query-cfg-loadData'>  /**
+</span>   * @cfg {Boolean} loadData
+   * 是否读取SQL生成的结果集首行所有字段数据，并存储至HttpServletRequest的attribute。
+   * 存储的属性名称为[itemId.字段名称]，属性值为字段值。
+   */
+  loadData: false,
+
+<span id='DataAccess-query-cfg-sql'>  /**
+</span>   * @cfg {String} sql
+   * 执行的SQL语句。SQL语句可以为任意有效的SQL语句，包括对存储过程或函数访问的SQL。
+   */
+
+<span id='DataAccess-query-cfg-transaction'>  /**
+</span>   * @cfg {String} transaction
+   * 是否启用或提交数据库事务。有效值为：
+   *
+   *     start：开始当前请求默认使用的数据库连接的事务，如果事务已经启用，将先提交之前的事务并开始新的事务。
+   *     commit：如果之前已经启用事务，将在SQL执行完成后提交事务。如果之前未启用事务，将开始事务并执行SQL，然后提交事务。
+   *     none：不执行任何操作。
+   *
+   * 如果未指定该值并且uniqueUpdate属性为true或arrayName属性不为空，默认为'start'。
+   */
+
+<span id='DataAccess-query-cfg-type'>  /**
+</span>   * @cfg {String} type
+   * 执行SQL语句使用的方法类型。有效值为：
+   *
+   *     query：使用executeQuery方法执行SQL语句。
+   *     update：使用executeUpdate方法执行SQL语句。如果使用批处理，将使用此方法。
+   *     execute：使用execute方法执行SQL语句。如果未指定该属性且不使用&quot;{}&quot;语法，默认使用此方法。
+   *     call：使用execute方法执行SQL语句，并创建CallableStatement对象。如果SQL语句使用&quot;{}&quot;语法执行SQL，默认使用此方法。
+   *
+   * 默认为自动选择。
+   */
+
+<span id='DataAccess-query-cfg-uniqueUpdate'>  /**
+</span>   * @cfg {Boolean} uniqueUpdate
+   * 指定是否在执行insert, update或delete等返回影响记录数的语句时，是否返回值必须为1。
+   * 如果指定该属性为true，那么返回值必须为1，如果返回值不为1将抛出“记录更新不唯一”的异常。
+   * 设置此属性可保证数据库更新记录的唯一性。
+   */
+  uniqueUpdate: false
+};</pre>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"hidden":false,"children":[{"configs":{"serverScript":"app.run('delete from BRAINSCHOOL_BASEDATA_CUSTTYPE where TYPE_ID={?TYPE_ID?}', {\n  arrayName: ' typeIds'\n});","itemId":"module"},"expanded":true,"children":[],"type":"module"}],"roles":{},"title":"删除","iconCls":"","inframe":false,"pageLink":""}

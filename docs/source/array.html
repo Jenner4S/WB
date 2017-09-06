@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='General-array'>/**
+</span> * @class General.array
+ * 
+ * 数组控件，数据内所有的子控件将自动成为数组的一员。
+ * 该控件往往作为配置项添加到指定控件下，比如添加到ListView.grid下并设置itemId为columns，使其作为grid的列属性。
+ * 数组是JavaScript的原生对象，请参考Array对象。
+ */
+var array = {
+<span id='General-array-cfg-description'>  /**
+</span>   * @cfg {String} description
+   * 对目录进行描述或备忘的任意文本。
+   */
+
+<span id='General-array-cfg-isConfig'>  /**
+</span>   * @cfg {Boolean} isConfig
+   * 指定该控件是否作为父控件的配置项。true作为父控件的配置项，false作为父控件的子控件。
+   * 如果值为true，该控件的对象表达式将添加到父控件的以该控件itemId属性值为名称的属性下。
+   */
+  isConfig: 'auto'
+
+<span id='General-array-cfg-itemId'>  /**
+</span>   * @cfg {String} itemId
+   * 用以标识数组的名称。
+   */
+};</pre>
+</body>
+</html>

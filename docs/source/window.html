@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='General-window'>/**
+</span> * @class General.window
+ * 
+ * 弹出式的可拖动并可调整大小的容器控件，用于实现应用的窗口。
+ * 该控件封装了Ext.window.Window类，扩展属性在本文档中说明，其他属性请参考Ext JS文档说明。
+ */
+var win = {
+<span id='General-window-cfg-autoReset'>  /**
+</span>   * @cfg {Boolean} autoReset
+   * 指定窗口隐藏时是否重置窗口内所有控件的值。
+   */
+  autoReset: false,
+
+<span id='General-window-cfg-closeAction'>  /**
+</span>   * @cfg {String} closeAction
+   * 调用窗口的关闭动作时执行的方法。
+   */
+  closeAction: 'hide',
+
+<span id='General-window-cfg-createInstance'>  /**
+</span>   * @cfg {Boolean} createInstance
+   * 是否创建对象的实例，如果设置为false只创建对象表达式。
+   */
+  createInstance: true,
+
+<span id='General-window-cfg-createObject'>  /**
+</span>   * @cfg {Boolean} createObject
+   * 是否根据该控件html属性中dom控件的obj属性指定的对象表达式创建对象实例。
+   */
+  createObject: false,
+
+<span id='General-window-cfg-dialog'>  /**
+</span>   * @cfg {Boolean} dialog
+   * 指定该窗口是否为对话框，对话框窗口是指模态且不可调整窗口大小并具有确定和取消按钮的窗口。对话框默认autoReset属性为true。
+   */
+  dialog: false,
+
+<span id='General-window-cfg-editWin'>  /**
+</span>   * @cfg {Boolean} editWin
+   * 指定该窗口是否为编辑窗口，编辑窗口是指dialog为true，autoReset为true的窗口。
+   */
+  editWin: false,
+
+<span id='General-window-cfg-flat'>  /**
+</span>   * @cfg {Boolean} flat
+   * 是否创建透明且无边框的面板。
+   */
+  flat: false,
+
+<span id='General-window-cfg-focusControl'>  /**
+</span>   * @cfg {String} focusControl
+   * 窗口显示时需要设置为焦点的窗口内指定控件的itemId或selector表达式。该配置项区别于defaultFocus属性，仅窗口显示时设置指定控件的焦点。
+   */
+  focusControl: undefined,
+
+<span id='General-window-cfg-isConfig'>  /**
+</span>   * @cfg {Boolean} isConfig
+   * 指定该控件是否作为父控件的配置项。true作为父控件的配置项，false作为父控件的子控件。
+   * 如果值为true，该控件的对象表达式将添加到父控件的以该控件itemId属性值为名称的属性下。
+   */
+  isConfig: 'auto',
+
+<span id='General-window-cfg-normalName'>  /**
+</span>   * @cfg {String} normalName
+   * 在命名空间下指向该对象的变量名称，可以通过app.normalName访问该对象。
+   * 如果该值为空，normalName取自itemId属性值。
+   */
+  normalName: undefined,
+
+<span id='General-window-cfg-onEnter'>  /**
+</span>   * @cfg {Function} onEnter
+   * 在窗口内按回车键时触发的事件。如果窗口是对话框并且希望监听按回车键时响应按确定按钮，请在ok事件中处理。
+   * @cfg {Ext.window.Window} onEnter.win 窗口对象。
+   * @cfg {Number} onEnter.key 按键编号。
+   * @cfg {Ext.EventObject} onEnter.e 事件对象。
+   */
+
+<span id='General-window-cfg-onEsc'>  /**
+</span>   * @cfg {Function} onEsc
+   * 在窗口内按ESC键时触发的事件。如果窗口是对话框并且希望监听按ESC键时响应按取消按钮，请在cancel事件中处理。
+   * @cfg {Ext.window.Window} onEsc.win 窗口对象。
+   * @cfg {Number} onEsc.key 按键编号。
+   * @cfg {Ext.EventObject} onEsc.e 事件对象。
+   */
+
+<span id='General-window-cfg-popupMenu'>  /**
+</span>   * @cfg {Ext.menu.Menu} popupMenu
+   * 设置该对象关联的上下文菜单，通常点击右键时弹出关联的菜单。
+   */
+  popupMenu: undefined,
+
+<span id='General-window-cfg-tagConfigs'>  /**
+</span>   * @cfg {Object} tagConfigs
+   * 对象或任意的脚本添加到该控件的配置项中。如设置为{foo: 'bar'}将为该控件增加配置项foo，其值为bar。
+   */
+  tagConfigs: undefined,
+
+<span id='General-window-cfg-transparent'>  /**
+</span>   * @cfg {Boolean} transparent
+   * 是否创建透明的面板。
+   */
+  transparent: false
+
+<span id='General-window-event-cancel'>  /**
+</span>   * @event cancel
+   * 如果窗口为对话框，该事件将在点击取消按钮或按ESC键时触发。
+   * @param {Ext.window.Window} win 窗口对象。
+   * @param {Object} options 事件选项。
+   */
+
+<span id='General-window-event-ok'>  /**
+</span>   * @event ok
+   * 如果窗口为对话框，该事件将在点击确定按钮或按回车键时触发。
+   * @param {Ext.window.Window} win 窗口对象。
+   * @param {Object} options 事件选项。
+   */
+
+<span id='General-window-event-tagEvents'>  /**
+</span>   * @event tagEvents
+   * 对象或任意的脚本添加到该控件的事件中。如设置为{destroy: app.destroyHandler}将为该控件增加destroy事件时执行app.destroyHandler方法。
+   */
+};</pre>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='DataAccess-sqlswitcher'>/**
+</span> * @class DataAccess.sqlswitcher
+ * 
+ * 用于根据特定的变量使用不同的SQL语句。使用该控件可以在编写跨不同数据库的应用时，自动切换到对应数据库类型的SQL语句。
+ * sqlswitcher默认根据varName属性指定的变量，把名称为变量值的属性值设置到HttpServletRequest的attribute属性中，属性名称由itemId指定。
+ *
+ * # 举例
+ * 假设设置itemId属性为switcher1，varName属性为myVar，oracle属性为sql，当myVar参数值为oracle时，switcher1参数值为sql。
+ * 在SQL语句中可以通过{#switcher1#}或app.get('switcher1')来引用该值。
+ */
+var sqlswitcher = {
+<span id='DataAccess-sqlswitcher-cfg-db2'>  /**
+</span>   * @cfg {String} db2
+   * 指定varName值为名称的变量值为db2时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-default'>  /**
+</span>   * @cfg {String} default
+   * 当未找到对应的属性值或属性值为空时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-derby'>  /**
+</span>   * @cfg {String} derby
+   * 指定varName值为名称的变量值为derby时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-firebird'>  /**
+</span>   * @cfg {String} firebird
+   * 指定varName值为名称的变量值为firebird时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-h2'>  /**
+</span>   * @cfg {String} h2
+   * 指定varName值为名称的变量值为h2时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-hsqldb'>  /**
+</span>   * @cfg {String} hsqldb
+   * 指定varName值为名称的变量值为hsqldb时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-informix'>  /**
+</span>   * @cfg {String} informix
+   * 指定varName值为名称的变量值为informix时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-itemId'>  /**
+</span>   * @cfg {String} itemId
+   * 用以标识控件的名称。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-mysql'>  /**
+</span>   * @cfg {String} mysql
+   * 指定varName值为名称的变量值为mysql时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-oracle'>  /**
+</span>   * @cfg {String} oracle
+   * 指定varName值为名称的变量值为oracle时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-pointbase'>  /**
+</span>   * @cfg {String} pointbase
+   * 指定varName值为名称的变量值为pointbase时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-postgresql'>  /**
+</span>   * @cfg {String} postgresql
+   * 指定varName值为名称的变量值为postgresql时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-sqlserver'>  /**
+</span>   * @cfg {String} sqlserver
+   * 指定varName值为名称的变量值为sqlserver时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-sybase'>  /**
+</span>   * @cfg {String} sybase
+   * 指定varName值为名称的变量值为sybase时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-teradata'>  /**
+</span>   * @cfg {String} teradata
+   * 指定varName值为名称的变量值为teradata时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-userDefine1'>  /**
+</span>   * @cfg {String} userDefine1
+   * 指定varName值为名称的变量值为userDefine1时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-userDefine2'>  /**
+</span>   * @cfg {String} userDefine2
+   * 指定varName值为名称的变量值为userDefine2时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-userDefine3'>  /**
+</span>   * @cfg {String} userDefine3
+   * 指定varName值为名称的变量值为userDefine3时，设置到HttpServletRequest的attribute值。
+   */
+
+<span id='DataAccess-sqlswitcher-cfg-varName'>  /**
+</span>   * @cfg {String} varName
+   * 用于指定使用的属性值的变量名称，默认为sys.db.defaultType。
+   */
+};</pre>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='General-combo'>/**
+</span> * @class General.combo
+ * 
+ * 下拉框输入框控件，用于弹出下拉列表并允许用户选择输入。
+ * 该控件封装了Ext.form.field.ComboBox类，扩展属性在本文档中说明，其他属性请参考Ext JS文档说明。
+ */
+var combo = {
+<span id='General-combo-cfg-bindField'>  /**
+</span>   * @cfg {String} bindField
+   * 使该控件的取值绑定到指定的字段的名称。绑定后将在控件所在的容器中创建隐藏控件，其值关联bindField指定字段的值。
+   * 当取容器的值时，比如使用Wb.getValue(app.panel1)取值时，除获取该控件值外，还可获得bindField指定字段的值。
+   * 设置该属性也使控件的值输入或选择必须存在于下拉列表中。
+   * 当下拉框需要绑定store从远程取数，并且数据存在显示文本和值的对应关系时，可以通过设置此属性来实现。
+   * 该属性区别于valueField，valueField的说明见Ext JS文档说明。
+   */
+
+<span id='General-combo-cfg-createInstance'>  /**
+</span>   * @cfg {Boolean} createInstance
+   * 是否创建对象的实例，如果设置为false只创建对象表达式。
+   */
+  createInstance: true,
+
+<span id='General-combo-cfg-enterKeyTriggerClick'>  /**
+</span>   * @cfg {Boolean} enterKeyTriggerClick
+   * 按回车键时是否执行触发器按钮事件，设置为true将在按回车键时执行onTriggerClick方法。
+   */
+  enterKeyTriggerClick: false,
+
+<span id='General-combo-cfg-isConfig'>  /**
+</span>   * @cfg {Boolean} isConfig
+   * 指定该控件是否作为父控件的配置项。true作为父控件的配置项，false作为父控件的子控件。
+   * 如果值为true，该控件的对象表达式将添加到父控件的以该控件itemId属性值为名称的属性下。
+   */
+  isConfig: 'auto',
+
+<span id='General-combo-cfg-keyName'>  /**
+</span>   * @cfg {String} keyName
+   * 设置关联的键名，键名是指键值编辑器中配置的键值列表名称。下拉框将自动根据键名取其所有子项列表数据作为下拉列表。
+   * 键值中的K值作为下拉框的valueField，V值作为下拉框的displayField。并自动设置下拉框forceSelection为true，
+   * queryMode为local，下拉列表按K值进行排序。
+   */
+
+<span id='General-combo-cfg-normalName'>  /**
+</span>   * @cfg {String} normalName
+   * 在命名空间下指向该对象的变量名称，可以通过app.normalName访问该对象。
+   * 如果该值为空，normalName取自itemId属性值。
+   */
+  normalName: undefined,
+
+<span id='General-combo-cfg-pickList'>  /**
+</span>   * @cfg {Array} pickList
+   * 下拉列表静态数据。该属性等同于store属性，请参考Ext JS文档说明。
+   * 示例：
+   *
+   *     ['WebBuilder', 'Java', 'JS', 'SQL', 'HTML5', 'Web'] 或 [['value1','text1'],['value2','text2']]
+   *
+   */
+
+<span id='General-combo-cfg-tagConfigs'>  /**
+</span>   * @cfg {Object} tagConfigs
+   * 对象或任意的脚本添加到该控件的配置项中。如设置为{foo: 'bar'}将为该控件增加配置项foo，其值为bar。
+   */
+  tagConfigs: undefined
+
+<span id='General-combo-event-tagEvents'>  /**
+</span>   * @event tagEvents
+   * 对象或任意的脚本添加到该控件的事件中。如设置为{destroy: app.destroyHandler}将为该控件增加destroy事件时执行app.destroyHandler方法。
+   */
+};</pre>
+</body>
+</html>

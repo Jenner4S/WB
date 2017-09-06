@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='DataAccess-updater'>/**
+</span> * @class DataAccess.updater
+ * 
+ * 根据前台传递的数据自动生成指定的SQL语句并执行的控件。
+ * 在ServerScript中可以使用app.update方法完成相同的功能。
+ * 下面举例说明该控件的工作原理：
+ *
+ * # 数据库表结构
+ * 假设数据库中存在表DEMO，其结构如下：
+ * &lt;table&gt;
+ * &lt;tr&gt;&lt;td&gt;字段&lt;/td&gt;&lt;td&gt;类型&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;F1&lt;/td&gt;&lt;td&gt;字符型&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;F2&lt;/td&gt;&lt;td&gt;数字型&lt;/td&gt;&lt;/tr&gt;
+ * &lt;/table&gt;
+ *
+ * # 批量更新指定表的数据
+ * 假设前台提交以下3个参数，其名称和值分别为：
+ *
+ *     destroy:[{&quot;F1&quot;:&quot;abc&quot;,&quot;F2&quot;:123,&quot;#F1&quot;:&quot;abc&quot;,&quot;#F2&quot;:123}]
+ *     update:[{&quot;F1&quot;:&quot;defx&quot;,&quot;F2&quot;:4567,&quot;#F1&quot;:&quot;def&quot;,&quot;#F2&quot;:456}]
+ *     create:[{&quot;F1&quot;:&quot;hij&quot;,&quot;F2&quot;:789},{&quot;F1&quot;:&quot;lmn&quot;,&quot;F2&quot;:215}]
+ *
+ * 各个参数值均为数组，数组内可包含多条记录。其中字段名称前带“#”符号的表示字段的原始值。
+ * 使用updater批量更新数据时，只需设置控件tableName属性为demo，控件即可根据上述参数自动生成insert, update和delete语句以更新该表的数据。
+ * 首先如果存在destroy参数，控件自动生成delete语句，删除destroy参数指定列表数据的记录。
+ * 其次如果存在update参数，控件自动生成update语句，更新update参数指定列表数据的记录。
+ * 最后如果存在create参数，控件自动生成insert语句，添加create参数指定列表数据的记录。
+ * 所有操作默认均在一个事务内处理。
+ *
+ * # 执行指定类型的更新
+ * 假设前台提交以下4个参数，其名称和值分别为：
+ *
+ *     F1: 'abcd'
+ *     F2: 1234
+ *     #F1: 'abc'
+ *     #F2: 123
+ *
+ * 使用updater更新数据，只需设置控件tableName属性为demo，mode属性为update，即可生成update语句，生成的语句通常等效如下SQL：
+ *
+ *     update demo set F1='abcd', F2=1234 where F1='abc' and F2=123
+ */
+var updater = {
+<span id='DataAccess-updater-cfg-batchUpdate'>  /**
+</span>   * @cfg {Boolean} batchUpdate
+   * 是否使用数据库内置的批处理功能处理批量更新的数据。
+   * true使用数据库内置的批处理功能，false使用循环执行SQL语句。
+   * 如果使用batchUpdate，uniqueUpdate属性将无效。
+   */
+  batchUpdate: false,
+
+<span id='DataAccess-updater-cfg-disabled'>  /**
+</span>   * @cfg {Boolean} disabled
+   * 是否禁用该控件。
+   */
+  disabled: false,
+
+<span id='DataAccess-updater-cfg-fieldsMap'>  /**
+</span>   * @cfg {Object} fieldsMap
+   * 字段名称和参数名称对照对象。当字段名称和参数名称不一致时可以使用此属性来设置。
+   * 例如表DEMO存在字段F1和F2，当前台提交的参数名称为V1和V2时，可以通过以下设置来指定对应关系。
+   *
+   *     {F1: 'V1', F2: 'V2'}
+   */
+
+<span id='DataAccess-updater-cfg-ignoreBlob'>  /**
+</span>   * @cfg {Boolean} ignoreBlob
+   * 是否忽略对二进制字段的处理。该属性通常用于指定mode的数据更新。
+   */
+  ignoreBlob: false,
+
+<span id='DataAccess-updater-cfg-isolation'>  /**
+</span>   * @cfg {String} isolation
+   * 如果启用事务指定事务的隔离程度。有效值为readCommitted, readUncommitted, repeatableRead和serializable。
+   */
+
+<span id='DataAccess-updater-cfg-itemId'>  /**
+</span>   * @cfg {String} itemId
+   * 用以标识控件的名称。
+   */
+
+<span id='DataAccess-updater-cfg-jndi'>  /**
+</span>   * @cfg {String} jndi
+   * 数据库连接jndi变量名称。变量名称在变量配置模块sys.jndi目录内预定义，其值为jndi全名。
+   */
+
+<span id='DataAccess-updater-cfg-mode'>  /**
+</span>   * @cfg {String} mode
+   * 数据更新的类型。如果设置此属性，则只执行指定类型的更新，其数据不再由create, update和destroy参数指定，而是取自全部参数。
+   * 如果未设置此属性，将根据create, update和destroy参数执行对应的批量更新。其有效值为：
+   *
+   *     insert：生成对应的insert语句，执行添加数据操作。
+   *     update：生成对应的update语句，执行更新数据操作。
+   *     delete：生成对应的delete语句，执行删除数据操作。
+   */
+
+<span id='DataAccess-updater-cfg-paramDelete'>  /**
+</span>   * @cfg {String} paramDelete
+   * 删除数据源参数名称。仅适用于批量更新，即未指定mode的数据更新。
+   */
+  paramDelete: 'destroy',
+
+<span id='DataAccess-updater-cfg-paramInsert'>  /**
+</span>   * @cfg {String} paramInsert
+   * 添加数据源参数名称。仅适用于批量更新，即未指定mode的数据更新。
+   */
+  paramInsert: 'create',
+
+<span id='DataAccess-updater-cfg-paramUpdate'>  /**
+</span>   * @cfg {String} paramUpdate
+   * 更新数据源参数名称。仅适用于批量更新，即未指定mode的数据更新。
+   */
+  paramUpdate: 'update',
+
+<span id='DataAccess-updater-cfg-sqlDelete'>  /**
+</span>   * @cfg {String} sqlDelete
+   * 指定delete SQL语句，用以替代系统自动生成的SQL语句。设置为“-”表示不则行delete语句。
+   */
+
+<span id='DataAccess-updater-cfg-sqlInsert'>  /**
+</span>   * @cfg {String} sqlInsert
+   * 指定insert SQL语句，用以替代系统自动生成的SQL语句。设置为“-”表示不则行insert语句。
+   */
+
+<span id='DataAccess-updater-cfg-sqlUpdate'>  /**
+</span>   * @cfg {String} sqlUpdate
+   * 指定update SQL语句，用以替代系统自动生成的SQL语句。设置为“-”表示不则行update语句。
+   */
+
+<span id='DataAccess-updater-cfg-tableName'>  /**
+</span>   * @cfg {String} tableName
+   * 需要更新的实体表名称。所有自动生成的SQL语句均基于该表。
+   */
+
+<span id='DataAccess-updater-cfg-transaction'>  /**
+</span>   * @cfg {String} transaction
+   * 是否启用或提交数据库事务。有效值为：
+   *
+   *     start：开始当前请求默认使用的数据库连接的事务，如果事务已经启用，将先提交之前的事务并开始新的事务。
+   *     commit：如果之前已经启用事务，将在SQL执行完成后提交事务。如果之前未启用事务，将开始事务并执行SQL，然后提交事务。
+   *     none：不执行任何操作。
+   */
+  transaction: 'start',
+
+<span id='DataAccess-updater-cfg-type'>  /**
+</span>   * @cfg {String} type
+   * 执行SQL语句使用的方法类型。有效值为：
+   *
+   *     query：使用executeQuery方法执行SQL语句。
+   *     update：使用executeUpdate方法执行SQL语句。如果使用批处理，将使用此方法。
+   *     execute：使用execute方法执行SQL语句。如果未指定该属性且不使用&quot;{}&quot;语法，默认使用此方法。
+   *     call：使用execute方法执行SQL语句，并创建CallableStatement对象。如果SQL语句使用&quot;{}&quot;语法执行SQL，默认使用此方法。
+   *
+   * 默认为自动选择。
+   */
+
+<span id='DataAccess-updater-cfg-uniqueUpdate'>  /**
+</span>   * @cfg {Boolean} uniqueUpdate
+   * 指定是否在执行insert, update或delete等返回影响记录数的语句时，是否返回值必须为1。
+   * 如果指定该属性为true，那么返回值必须为1，如果返回值不为1将抛出“记录更新不唯一”的异常。
+   * 设置此属性可保证数据库更新记录的唯一性。
+   */
+  uniqueUpdate: true,
+
+<span id='DataAccess-updater-cfg-useExistFields'>  /**
+</span>   * @cfg {Boolean} useExistFields
+   * 自动生成的SQL语句中的字段是否只使用存在参数值的字段。例如表DEMO存在字段F1, F2和F3共3个字段，但提交的参数中只包含F1和F2。
+   * 如果设置此值为true，F3字段将在自动生成的SQL语句中被排除。
+   */
+  useExistFields: true
+
+<span id='DataAccess-updater-cfg-whereFields'>  /**
+</span>   * @cfg {String} whereFields
+   * 自动生成的SQL语句where部分表达式使用的以逗号分隔的字段列表。如果未设置此值将使用所有有效的字段组成where表达式。
+   * 可以通过设置此属性来指定自动生成的where表达式所使用的字段。例如可以设置为主键字段，则where表达式仅包含该主键字段。
+   */
+};</pre>
+</body>
+</html>

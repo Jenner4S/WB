@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='General-clientscript'>/**
+</span> * @class General.clientscript
+ * 
+ * 自定义的客户端脚本控件，在该控件中可以添加自定义的HTML，JavaScript或其他任意客户端脚本。
+ * 在该控件中添加的脚本将直接输出到当前上下文中，比如在panel控件下添加clientscript控件并在headerScript属性中添加JavaScript脚本，
+ * 将直接把这些JavaScript脚本输出到panel的子控件脚本中。
+ * clientscript控件配置项中各个HTML和JavaScript属性在页面中的输出位置示意如下：
+ * {@img clientscript.png 脚本输出位置示意图}
+ */
+var clientscript = {
+<span id='General-clientscript-cfg-footerHtml'>  /**
+</span>   * @cfg {String} footerHtml
+   * 输出到当前HTML上下文结尾处的脚本。
+   */
+
+<span id='General-clientscript-cfg-footerScript'>  /**
+</span>   * @cfg {String} footerScript
+   * 输出到当前JavaScript上下文结尾处的脚本。
+   */
+
+<span id='General-clientscript-cfg-headerHtml'>  /**
+</span>   * @cfg {String} headerHtml
+   * 输出到当前HTML上下文开始处的脚本。
+   */
+
+<span id='General-clientscript-cfg-headerScript'>  /**
+</span>   * @cfg {String} headerScript
+   * 输出到当前JavaScript上下文开始处的脚本。
+   */
+
+<span id='General-clientscript-cfg-isConfig'>  /**
+</span>   * @cfg {Boolean} isConfig
+   * 指定该控件是否作为父控件的配置项。true作为父控件的配置项，false作为父控件的子控件。
+   * 如果值为true，该控件的对象表达式将添加到父控件的以该控件itemId属性值为名称的属性下。
+   */
+  isConfig: 'auto'
+
+<span id='General-clientscript-cfg-itemId'>  /**
+</span>   * @cfg {String} itemId
+   * 用以标识控件的名称。
+   */
+};</pre>
+</body>
+</html>
